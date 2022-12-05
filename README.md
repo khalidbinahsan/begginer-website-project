@@ -11,6 +11,107 @@ php artisan serve
 ```bash
 php artisan serve --port=8080
 ```
+#### To Create a DB table
+```bash
+php artisan make:migration MigrationName
+```
+### Code Example
+```bash
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class VisitorTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('visitor', function (Blueprint $table){
+            $table->bigIncrements('id');
+            $table->string('ip_address');
+            $table->string('visit_time');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        //
+    }
+}
+
+```
+#### To make a Model
+```bash
+php artisan make:Model ModelName
+```
+### Code Example
+```bash
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class VisitorModel extends Model
+{
+    use HasFactory;
+    public $table='visitor';
+    public $primaryKey='id';
+    public $incrementing=true;
+    public $keyType='int';
+    public $timestamps=false;
+}
+
+```
+Note: After Creating Migration and Model file you should run migration command to create the table and column
+```bash
+php artisan migrate
+```
+#### To make a Controller
+```bash
+php artisan make:controller ControllerName
+```
+### Code Example
+```bash
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\ModelFileName;
+class HomeController extends Controller
+{
+    function HomeIndex(){
+        return view('Home');
+    }
+}
+
+```
+Note: You should add Model file to Controller file manually.
+```bash
+use App\Models\ModelFileName;
+```
+# Routing System on Laravel 8
+There some changes on Routing System in Laravel 8
+```bash
+Route::get('/', [ControllerName::class, 'FunctionName']);
+```
+Note: You should add the Controller file manually.
+```bash
+use App\Http\Controllers\ControllersName;
+```
 # Using Function
  ## 1. {{asset}}
 This Function help you to link up your external css, js or img file
@@ -40,3 +141,9 @@ To marge your on page to another you should do it with this function. Suppose yo
 @extends('Layout.app')
 ```
 Here the Layout is folder name and app is the file name.
+## 5. $_SERVER['REMOTE_ADDR']
+By this function you can get the ip address of your site visitor.
+## 6. date_default_timezone_set('Asia/Dhaka')
+To set your default time zone
+## 7. date('Y-m-d h:i:sa')
+To set your time format
