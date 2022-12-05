@@ -7,7 +7,7 @@ composer create-project --prefer-dist laravel/laravel folder-name
 ```bash
 php artisan serve
 ```
-####To run the project by setting a port
+#### To run the project by setting a port
 ```bash
 php artisan serve --port=8080
 ```
