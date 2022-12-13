@@ -155,3 +155,70 @@ To set your default time zone
 To set your time format
 ## 9. json_decode()
 When you get all of your data from table by all() function, it actually store by a json file. so if you want to get it by arrow types you should decode it by this function. This function contain parameter. so when you give a parameter like 'ture' so the data will store by a associative array. Default value is False. 
+Note: In laravel latest version no need to encode json data
+## 10. inset()
+By this function you can inset your data into database to a particular column.
+### Code Example
+```bash 
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\VisitorModel;
+
+class HomeController extends Controller
+{
+    function HomeIndex(){
+        $userIP = $_SERVER['REMOTE_ADDR'];
+        date_default_timezone_set('Asia/Dhaka');
+        $timeDate= date('Y-m-d h:i:sa');
+        VisitorModel::insert(['ip_address'=>$userIP, 'visit_time'=>$timeDate]);
+
+        return view('Home');
+    }
+}
+
+```
+## 11. all()
+Get your all data from database through array();
+### Code Example
+```bash
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\VisitorModel;
+
+class VisitorController extends Controller
+{
+    function VisitorList(){
+        $VisitorData = VisitorModel::all();
+        // when you want to pass a variable value by a view you should set a key and it's value.
+        return view('Visitor', ['VisitorData' => $VisitorData]);
+    }
+}
+
+```
+## 12.get()
+if you want to get particular number of data, you can use this function
+### Code Example
+```bash
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\VisitorModel;
+
+class VisitorController extends Controller
+{
+    function VisitorList(){
+        $VisitorData = VisitorModel::orderBy('id', 'desc')->take(3)->get();
+        // when you want to pass a variable value by a view you should set a key and it's value.
+        return view('Visitor', ['VisitorData' => $VisitorData]);
+    }
+}
+
+```

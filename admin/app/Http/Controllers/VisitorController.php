@@ -8,8 +8,8 @@ use App\Models\VisitorModel;
 class VisitorController extends Controller
 {
     function VisitorList(){
-        $VisitorData = json_decode(VisitorModel::all(),true);
+        $VisitorData = VisitorModel::orderBy('id', 'desc')->take(500)->get();
         // when you want to pass a variable value by a view you should set a key and it's value.
-        return view('Visitor', ['VisitorData => $VisitorData']);
+        return view('Visitor', ['VisitorData' => $VisitorData]);
     }
 }
