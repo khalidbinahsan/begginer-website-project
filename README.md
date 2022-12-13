@@ -113,37 +113,45 @@ Note: You should add the Controller file manually.
 use App\Http\Controllers\ControllersName;
 ```
 # Using Function
- ## 1. {{asset}}
+ ## 1. {{asset()}}
 This Function help you to link up your external css, js or img file
 
 ### Example:
 ```bash 
 <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet" >
 ```
-## 2. @yield()
+## 2. {{url()}}
+This function use for set a href link on anchor tag.
+### Example
+```bash 
+<a href="{{url('/visitor')}}">Visitor</a>
+```
+## 3. @yield()
 This Function use to grab your content
 ### Example:
 ```bash
 @yield('content')
 @yield('title')
 ```
-## 3. @include()
+## 4. @include()
 With this you can add any Layout into your page
 ### Example:
 ```bash 
 @include('Layout.menu')
 ```
 Here Layout is folder name and menu is file name.
-## 4. @extends()
+## 5. @extends()
 To marge your on page to another you should do it with this function. Suppose you want to grab your header and footer from the master Layout folder, so you can do this with @extends function
 ### Example:
 ```bash
 @extends('Layout.app')
 ```
 Here the Layout is folder name and app is the file name.
-## 5. $_SERVER['REMOTE_ADDR']
+## 6. $_SERVER['REMOTE_ADDR']
 By this function you can get the ip address of your site visitor.
-## 6. date_default_timezone_set('Asia/Dhaka')
+## 7. date_default_timezone_set('Asia/Dhaka')
 To set your default time zone
-## 7. date('Y-m-d h:i:sa')
+## 8. date('Y-m-d h:i:sa')
 To set your time format
+## 9. json_decode()
+When you get all of your data from table by all() function, it actually store by a json file. so if you want to get it by arrow types you should decode it by this function. This function contain parameter. so when you give a parameter like 'ture' so the data will store by a associative array. Default value is False. 
