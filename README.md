@@ -112,6 +112,28 @@ Note: You should add the Controller file manually.
 ```bash
 use App\Http\Controllers\ControllersName;
 ```
+# Data Called by axios js
+To call your database file by axios js you should write some js code into your public/custom.js file.
+### Code Example
+```bash 
+function getServicesData() {
+    axios.get('/getServicesData')
+        .then(function(response) {
+            var jsonData = response.data;
+            $.each(jsonData, function(i, item) {
+                $('<tr>').html(
+                    '<td><img class="table-img" src="' + jsonData[i].service_img +
+                    '"></td><td>' + jsonData[i].service_name +
+                    '</td><td>' + jsonData[i].service_des +
+                    '</td><td><a href="" ><i class="fas fa-edit"></i></a></td><td><a href="" > <i class="fas fa-trash-alt"></i></a></td>').appendTo('#service_table');
+            });
+        })
+        .catch(function(error) {
+
+        });
+
+}
+```
 # Using Function
  ## 1. {{asset()}}
 This Function help you to link up your external css, js or img file
@@ -156,7 +178,14 @@ To set your time format
 ## 9. json_decode()
 When you get all of your data from table by all() function, it actually store by a json file. so if you want to get it by arrow types you should decode it by this function. This function contain parameter. so when you give a parameter like 'ture' so the data will store by a associative array. Default value is False. 
 Note: In laravel latest version no need to encode json data
-## 10. inset()
+## 10. json_encode()
+So if you want to get your database Data with javascript, you should get as a json file to complete it with ajax request.
+### Example
+```bash
+$result = json_encode(Modelname::all());
+```
+Note: in moder laravel version no need to use this. The Data come as a json file in latest laravel version
+## 11. inset()
 By this function you can inset your data into database to a particular column.
 ### Code Example
 ```bash 
@@ -180,7 +209,7 @@ class HomeController extends Controller
 }
 
 ```
-## 11. all()
+## 12. all()
 Get your all data from database through array();
 ### Code Example
 ```bash
@@ -201,7 +230,7 @@ class VisitorController extends Controller
 }
 
 ```
-## 12.get()
+## 13.get()
 if you want to get particular number of data, you can use this function
 ### Code Example
 ```bash
