@@ -134,6 +134,29 @@ function getServicesData() {
 
 }
 ```
+#Data call with axios by id
+###Code Example
+```bash
+function dataServiceDelete(deleteId) {
+    axios.post('/deleteService', { id: deleteId })
+        .then(function(response) {
+            $('.service-dlt-btn').html('DELETE');
+            if (response.data == 1) {
+                getServicesData();
+                $('#deleteModal').modal('hide');
+                $('#success-notifications').toast('show');           
+            } else {
+                getServicesData();
+                $('#deleteModal').modal('hide');
+                $('#error-notifications').toast('show');
+                
+            }
+        })
+        .catch(function(error) {
+           // Do something for error control
+        });
+}
+```
 # Using Function
  ## 1. {{asset()}}
 This Function help you to link up your external css, js or img file
@@ -209,7 +232,7 @@ class HomeController extends Controller
 }
 
 ```
-## 12. all()
+## 12. all() get all data from database
 Get your all data from database through array();
 ### Code Example
 ```bash
@@ -230,7 +253,7 @@ class VisitorController extends Controller
 }
 
 ```
-## 13.get()
+## 13.get() get only 3 data from database
 if you want to get particular number of data, you can use this function
 ### Code Example
 ```bash
@@ -251,3 +274,73 @@ class VisitorController extends Controller
 }
 
 ```
+##14. where() Get data by id 
+with where() function you can get your data by id
+###Code Example
+```bash
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\VisitorModel;
+
+class VisitorController extends Controller
+{
+    function getDataById(Request $req){
+        $id = $req->input('id');
+        $result = servicesModel::where('id', '=', $id)->get();
+        return $result;
+    }
+}
+```
+##15. delete() Delete data from database
+delete your data from database with this function
+###Code Example
+```bash
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\VisitorModel;
+
+class VisitorController extends Controller
+{
+      function deleteServiceData(Request $req){
+        $id = $req->input('id');
+        $result = servicesModel::where('id', '=', $id)->delete();
+        if($result==true){
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+}
+```
+##16. update() update your existing data with new one
+###Code Example
+```bash
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\VisitorModel;
+
+class VisitorController extends Controller
+{
+       function serviceUpdate(Request $req){
+        $id = $req->input('id');
+        $serviceName = $req->input('serviceName');
+        $serviceDescription = $req->input('serviceDescription');
+        $imageLink = $req->input('imageLink');
+        $result = servicesModel::where('id', '=', $id)->update(['service_name'=>$serviceName, 'service_des'=> $serviceDescription, 'service_img'=> $imageLink]);
+        if($result == true){
+            return 1;
+        } else {
+            return 0;
+        }
+}
+```
+

@@ -18,5 +18,10 @@ use App\Http\Controllers\servicesController;
 
 Route::get('/', [HomeController::class, 'HomeIndex']);
 Route::get('/visitor', [VisitorController::class, 'VisitorList']);
+// Service page route
 Route::get('/services', [servicesController::class, 'ServicesItem']);
 Route::get('/getServicesData', [servicesController::class, 'getServiceData']);
+Route::post('/deleteService', [servicesController::class, 'deleteServiceData']);
+Route::post('/getServiceDataById', [servicesController::class, 'getDataById']);
+Route::post('/updateServiceData', [servicesController::class, 'serviceUpdate']);
+Route::post('/addNewService', [servicesController::class, 'addNewServices']);
