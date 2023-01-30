@@ -274,9 +274,9 @@ class VisitorController extends Controller
 }
 
 ```
-##14. where() Get data by id 
+## 14. where() Get data by id 
 with where() function you can get your data by id
-###Code Example
+### Code Example
 ```bash
 <?php
 
@@ -294,9 +294,9 @@ class VisitorController extends Controller
     }
 }
 ```
-##15. delete() Delete data from database
+## 15. delete() Delete data from database
 delete your data from database with this function
-###Code Example
+### Code Example
 ```bash
 <?php
 
@@ -318,8 +318,8 @@ class VisitorController extends Controller
     }
 }
 ```
-##16. update() update your existing data with new one
-###Code Example
+## 16. update() update your existing data with new one
+### Code Example
 ```bash
 <?php
 
