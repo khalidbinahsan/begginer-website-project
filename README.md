@@ -11,7 +11,9 @@ php artisan serve
 ```bash
 php artisan serve --port=8080
 ```
-#### To Create a DB table
+# Laravel Migration
+You can create a new database table with this command
+### Command
 ```bash
 php artisan make:migration MigrationName
 ```
@@ -51,7 +53,8 @@ class VisitorTable extends Migration
 }
 
 ```
-#### To make a Model
+# Create Laravel Model
+### Command
 ```bash
 php artisan make:Model ModelName
 ```
@@ -79,7 +82,8 @@ Note: After Creating Migration and Model file you should run migration command t
 ```bash
 php artisan migrate
 ```
-#### To make a Controller
+# Create Laravel Controller
+### Command
 ```bash
 php artisan make:controller ControllerName
 ```
@@ -112,7 +116,7 @@ Note: You should add the Controller file manually.
 ```bash
 use App\Http\Controllers\ControllersName;
 ```
-# Data Called by axios js
+# Data Call with axios
 To call your database file by axios js you should write some js code into your public/custom.js file.
 ### Code Example
 ```bash 
@@ -134,8 +138,8 @@ function getServicesData() {
 
 }
 ```
-#Data call with axios by id
-###Code Example
+# Data call with axios by id
+### Code Example
 ```bash
 function dataServiceDelete(deleteId) {
     axios.post('/deleteService', { id: deleteId })
@@ -157,7 +161,57 @@ function dataServiceDelete(deleteId) {
         });
 }
 ```
-# Using Function
+# Data Update with axios
+### Code Example
+```bash
+function serviceUpdate(id, serviceName, serviceDescription, imageLink){
+    if(serviceName.length==0){
+       $('#error-notifications').toast('show');
+       $('#error-notifications .error-msg').html('Service name is empty');
+   } else if(serviceDescription.length==0){
+       $('#error-notifications').toast('show');
+       $('#error-notifications .error-msg').html('Service description is empty');
+   } else if(imageLink.length==0){
+       $('#error-notifications').toast('show');
+       $('#error-notifications .error-msg').html('Service image is empty');
+   } else {
+       $('.saveChange-btn').html('<div class="spinner-border text-light" style="font-size: 12px" role="status"><span class="visually-hidden">Loading...</span></div>');
+       axios.post('/updateServiceData', {
+           id: id,
+           serviceName: serviceName,
+           serviceDescription: serviceDescription,
+           imageLink: imageLink
+       })
+       .then(function(response){
+           $('.saveChange-btn').html('Save Change');
+           if(response.status==200){
+               if(response.data == 1){
+                   getServicesData();
+                   $('#editModal').modal('hide');
+                   $('#success-notifications').toast('show');
+                   $('#success-notifications h5').html('Update Successful');
+               } else {
+                   getServicesData();
+                   $('#editModal').modal('hide');
+                   $('#error-notifications').toast('show');
+                   $('#error-notifications .error-msg').html('Update Fail'); 
+               }
+           } else {
+               $('#editModal').modal('hide');
+               $('#error-notifications').toast('show');
+               $('#error-notifications .error-msg').html('Something went wrong !');  
+           }
+
+       })
+       .catch(function (error) { 
+           $('#editModal').modal('hide');
+           $('#error-notifications').toast('show');
+           $('#error-notifications .error-msg').html('Something went wrong !');
+        });
+   }
+}
+```
+# Laravel Function
  ## 1. {{asset()}}
 This Function help you to link up your external css, js or img file
 
@@ -267,7 +321,7 @@ use App\Models\VisitorModel;
 class VisitorController extends Controller
 {
     function VisitorList(){
-        $VisitorData = VisitorModel::orderBy('id', 'desc')->take(3)->get();
+        $VisitorData = VisitorModel::orderBy('id', 'desc')->limit(3)->get();
         // when you want to pass a variable value by a view you should set a key and it's value.
         return view('Visitor', ['VisitorData' => $VisitorData]);
     }
@@ -341,6 +395,41 @@ class VisitorController extends Controller
         } else {
             return 0;
         }
+}
+```
+# 17. @foreach()
+This function use for loop of the data
+### Code Example
+```bash
+        @foreach($servicesData as $servicesData)
+            <div class="col-md-3 p-2 ">
+                <div class="card service-card text-center w-100">
+                    <div class="card-body">
+                        <img class="service-card-logo " src="{{$servicesData->service_img}}" alt="Card image cap">
+                        <h5 class="service-card-title mt-3">{{$servicesData->service_name}}</h5>
+                        <h6 class="service-card-subTitle p-0 m-0">{{$servicesData->service_des}}</h6>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+```
+# 18. limit()
+Mention how many data you want to get
+### Code Example
+```bash
+function HomeIndex(){
+        $userIP = $_SERVER['REMOTE_ADDR'];
+        date_default_timezone_set('Asia/Dhaka');
+        $timeDate= date('Y-m-d h:i:sa');
+        VisitorModel::insert(['ip_address'=>$userIP, 'visit_time'=>$timeDate]);
+        $servicesData = servicesModel::all();
+        $courseData = CourseModel::orderBy('id', 'desc')->limit(6)->get();
+        return view('Home', [
+            'servicesData'=>$servicesData,
+            'courseData'=>$courseData
+        ]);
+
+
 }
 ```
 
