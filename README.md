@@ -458,4 +458,28 @@ function HomeIndex(){
 
 }
 ```
-
+# 19. count()
+With this function you can count the database table row easily. Just select the model
+### Code Example
+```bash
+class HomeController extends Controller
+{
+   function HomeIndex(){
+      $TotalCourse = CourseModel::count();
+      $TotalProject = ProjectModel::count();
+      $TotalReview = ReviewModel::count();
+      $TotalServices = servicesModel::count();
+      $TotalVisitor = VisitorModel::count();
+      $TotalContact = MessageModel::count();
+        return view('Home', [
+         'TotalCourse'=>$TotalCourse,
+         'TotalProject'=>$TotalProject,
+         'TotalReview'=>$TotalReview,
+         'TotalServices'=>$TotalServices,
+         'TotalVisitor'=>$TotalVisitor,
+         'TotalContact'=>$TotalContact
+        ]);
+   }
+   
+}
+```
