@@ -23,6 +23,9 @@
                     <li> <a href="{{url('/visitor')}}"><span> <i class="fas fa-users"></i> </span><span class="hide-menu">Visitor</span></a></li>
                     <li> <a href="{{url('/services')}}"><span> <i class="fas fa-globe"></i> </span><span class="hide-menu">Services</span></a></li>
                     <li> <a href="{{url('/courses')}}"><span> <i class="fa-solid fa-folder-open"></i> </span><span class="hide-menu">Courses</span></a></li>
+                    <li> <a href="{{url('/project')}}"><span> <i class="fa-solid fa-laptop-code"></i> </span><span class="hide-menu">Project</span></a></li>
+                    <li> <a href="{{url('/message')}}"><span> <i class="fa-solid fa-message"></i> </span><span class="hide-menu">Message</span></a></li>
+                    <li> <a href="{{url('/review')}}"><span> <i class="fa-solid fa-comment"></i> </span><span class="hide-menu">Review</span></a></li>
                 </ul>
             </nav>
         </div>

@@ -3,8 +3,8 @@
 <div class="container d-none" id="services-list">
     <div class="row">
     <div class="col-md-12 p-5">
-      <button class="btn btn-primary my-3" id="add-new-btn">Add New</button>
-    <table id="" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <button class="btn btn-primary my-3" id="add-new-btn">Add New</button>
+    <table id="serviceTableContainer" class="table table-striped table-bordered" cellspacing="0" width="100%">
       <thead>
         <tr>
           <th class="th-sm">Image</th>
@@ -181,7 +181,8 @@ function getServicesData() {
             if (response.status == 200) {
                 $('#services-list').removeClass('d-none');
                 $('#page-loader').addClass('d-none');
-                // To refuse table data duplicate
+                // To refuse table data duplicate         
+                $('#serviceTableContainer').DataTable().destroy();
                 $('#service_table').empty();
                 var jsonData = response.data;
                 $.each(jsonData, function(i, item) {
@@ -204,6 +205,8 @@ function getServicesData() {
                     $('.saveChange-btn').attr('data-id', id);
                     getServiceDataById(id);
                 });
+                $('#serviceTableContainer').DataTable({"order": false});
+                $('.dataTables_length').addClass('bs-select');
 
             } else {
                 $('#page-loader').addClass('d-none');
@@ -228,19 +231,22 @@ function dataServiceDelete(deleteId) {
     $('.service-dlt-btn').html('<div class="spinner-border text-light" role="status"><span class="visually-hidden">Loading...</span></div>');
     axios.post('/deleteService', { id: deleteId })
         .then(function(response) {
-            $('.service-dlt-btn').html('DELETE');
             if (response.data == 1) {
+                $('.service-dlt-btn').html('DELETE');
                 getServicesData();
                 $('#deleteModal').modal('hide');
-                $('#success-notifications').toast('show');           
+                $('#success-notifications').toast('show'); 
+                $('#success-notifications h5').html('Delete Sucessfully');          
             } else {
+              $('.service-dlt-btn').html('DELETE');
                 getServicesData();
                 $('#deleteModal').modal('hide');
                 $('#error-notifications').toast('show');
                 
             }
         })
-        .catch(function(error) {           
+        .catch(function(error) { 
+            $('.service-dlt-btn').html('DELETE');          
             $('#deleteModal').modal('hide');
             $('#error-notifications').toast('show');
             $('#error-notifications .error-msg').html('Something went wrong !');

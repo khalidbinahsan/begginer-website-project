@@ -211,6 +211,32 @@ function serviceUpdate(id, serviceName, serviceDescription, imageLink){
    }
 }
 ```
+# Data Delete with axios
+### Code Example
+```bash
+function dataServiceDelete(deleteId) {
+    $('.service-dlt-btn').html('<div class="spinner-border text-light" role="status"><span class="visually-hidden">Loading...</span></div>');
+    axios.post('/deleteService', { id: deleteId })
+        .then(function(response) {
+            $('.service-dlt-btn').html('DELETE');
+            if (response.data == 1) {
+                getServicesData();
+                $('#deleteModal').modal('hide');
+                $('#success-notifications').toast('show');           
+            } else {
+                getServicesData();
+                $('#deleteModal').modal('hide');
+                $('#error-notifications').toast('show');
+                
+            }
+        })
+        .catch(function(error) {           
+            $('#deleteModal').modal('hide');
+            $('#error-notifications').toast('show');
+            $('#error-notifications .error-msg').html('Something went wrong !');
+        });
+}
+```
 # Laravel Function
  ## 1. {{asset()}}
 This Function help you to link up your external css, js or img file

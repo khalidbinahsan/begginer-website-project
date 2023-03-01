@@ -13,7 +13,7 @@ class servicesController extends Controller
     }
     // Get all Data from services table
     function getServiceData(){
-       $result=servicesModel::all();
+       $result=servicesModel::orderBy('id', 'desc')->get();
        return $result; 
     }
     // Delete Data from services table
