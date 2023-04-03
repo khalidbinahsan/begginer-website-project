@@ -22,4 +22,5 @@ Route::get('/projects', [\App\Http\Controllers\ProjectController::class, 'projec
 Route::get('/privacy', [\App\Http\Controllers\PrivacyController::class, 'privacyIndex']);
 Route::get('/terms', [\App\Http\Controllers\termsController::class, 'termsIndex']);
 Route::get('/contact', [\App\Http\Controllers\ContactController::class, 'contactIndex']);
-
+/* Create Permalink */
+Route::get('postDetails/{id}/{title}', [HomeController::class, 'HomeIndex']);

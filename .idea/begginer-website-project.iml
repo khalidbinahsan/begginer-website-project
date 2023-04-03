@@ -115,6 +115,7 @@
       <excludeFolder url="file://$MODULE_DIR$/blog/vendor/psr/http-client" />
       <excludeFolder url="file://$MODULE_DIR$/blog/vendor/psr/http-factory" />
       <excludeFolder url="file://$MODULE_DIR$/blog/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/blog/vendor/artesaos/seotools" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

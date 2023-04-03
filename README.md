@@ -11,6 +11,10 @@ php artisan serve
 ```bash
 php artisan serve --port=8080
 ```
+#### To link up storage to public
+```bash
+php artisan storage:link
+```
 # Laravel Migration
 You can create a new database table with this command
 ### Command
@@ -106,6 +110,73 @@ class HomeController extends Controller
 Note: You should add Model file to Controller file manually.
 ```bash
 use App\Models\ModelFileName;
+```
+# Create Laravel Middleware
+### Command
+```bash
+php artisan make:middleware exampleMiddleWare
+```
+### Code Example
+```bash
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+
+class LoginCheckMiddleware
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
+    public function handle(Request $request, Closure $next)
+    {
+        if($request->session()->has('email')){
+            return $next($request);
+        } else {
+            return redirect('/login');
+        };
+        
+    }
+}
+
+```
+### Login Controller Example
+```bash
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\UserAdmin;
+
+class LoginController extends Controller
+{
+    function loginIndex(){
+        return view('Login');
+    }
+    function onLogin(Request $request){
+       $email = $request->input('email');
+       $password = $request->input('password');
+       $userCount = UserAdmin::where('email', '=', $email)->where('password', '=', $password)->count();
+       if($userCount==1){
+        $request->session()->put('email', $email);
+        return 1;
+       } else {
+        return 0;
+       }
+    }
+    function onLogOut(Request $request){
+        $request->session()->flush();
+        return redirect('/login');
+    }
+}
+
 ```
 # Routing System on Laravel 8
 There some changes on Routing System in Laravel 8
@@ -236,6 +307,157 @@ function dataServiceDelete(deleteId) {
             $('#error-notifications .error-msg').html('Something went wrong !');
         });
 }
+```
+# Data Insert() with axios
+### Code Example
+```bash
+$('#addNewData').click(function(){
+    var clientName = $('#addClientName').val();
+    var feedback = $('#addFeedback').val();
+    var clientPhoto = $('#clientPhoto').val();
+    if(clientName.length == 0){
+        $('#error-notifications').toast('show');
+        $('#error-notifications h5').html('Name Field is Empty');
+    } else if(feedback.length == 0){
+        $('#error-notifications').toast('show');
+        $('#error-notifications h5').html('Feedback Field is Empty'); 
+    } else if(clientPhoto.length == 0){
+        $('#error-notifications').toast('show');
+        $('#error-notifications h5').html('Photo Field is Empty'); 
+    } else {
+        $('#addNewReview').html('<div class="spinner-border text-light" role="status"><span class="visually-hidden">Loading...</span></div>');
+        axios.post('/add_new_review', {
+            'clientName': clientName, 
+            'clientFeedback': feedback,
+            'clientPhoto': clientPhoto
+        })
+        .then(function(response){
+            if(response.data == 1){
+                $('#addNewReview').html('Add');
+                $('#addClientName').val('');
+                $('#addFeedback').val('');
+                $('#clientPhoto').val('');
+                getReviewData();
+                $('#add-new-review-modal').modal('hide');
+                $('#success-notifications').toast('show');
+                $('#success-notifications h5').html('Review added successfully');
+            } else {
+                $('#addNewReview').html('Add');
+                $('#add-new-review-modal').modal('hide');
+                $('#error-notifications').toast('show');
+                $('#error-notifications h5').html('Review added fail'); 
+            }
+        })
+        .catch(function (error) { 
+            $('#addNewReview').html('Add');
+            $('#add-new-review-modal').modal('hide');
+            $('#error-notifications').toast('show');
+            $('#error-notifications h5').html('Review added fail'); 
+         })
+    }
+});
+
+```
+# jQuery serializeArray() method
+With serializeArray() method you can get form data.
+### Code Example
+```bash
+<script type="text/javascript">
+    $('.login-form').on('submit', function(event){
+        event.preventDefault();
+        let FormData = $(this).serializeArray();
+        let userName = FormData[0]['value'];
+        let password = FormData[1]['value'];
+    })
+</script>
+```
+# jQuery Image Preview function 
+First you need to take Html input type 
+### Code Example
+```bash
+<input type="file" id="image-input" class="form-control" />
+<img src="" alt="" id="image-preview" style="max-width: 100%">
+```
+Now run an event to see the Image
+### Code Example
+```bash
+$('#image-input').change(function(){
+        var reader = new FileReader();
+        reader.readAsDataURL(this.files[0]);
+        reader.onload = function(event){
+            var imgSource = event.target.result;
+            $('#image-preview').attr('src', imgSource);
+        }
+});
+```
+# Image upload full jQuery and Laravel Controller Code
+### jQeury Code Example
+```bash
+<script type="text/javascript">
+    $('#add-new').click(function(){
+        $('#add-new-modal').modal('show');
+    });
+    $('#image-input').change(function(){
+        var reader = new FileReader();
+        reader.readAsDataURL(this.files[0]);
+        reader.onload = function(event){
+            var imgSource = event.target.result;
+            $('#image-preview').attr('src', imgSource);
+        }
+    });
+    $('#upload-image').on('click', function(){
+      $(this).html('<div class="spinner-border text-light" style="font-size: 12px" role="status"><span class="visually-hidden">Loading...</span></div>')
+      var imageFile = $('#image-input').prop('files')[0];
+      var formData = new FormData();
+      formData.append('image', imageFile);
+      axios.post('/image_upload', formData)
+      .then(function(response){
+        if(response.status==200){
+          $('#upload-image').html('Add');
+          $('#add-new-modal').modal('hide');
+          $('#success-notifications').toast('show');
+          $('#success-notifications h5').html('Upload Successfull');
+        } else {
+          $('#upload-image').html('Add');
+          $('#add-new-modal').modal('hide');
+          $('#error-notifications').toast('show');
+          $('#error-notifications h5').html('Something went wrong');
+        }
+      })
+      .catch(function(error){
+        $('#upload-image').html('Add');
+        $('#add-new-modal').modal('hide');
+        $('#error-notifications').toast('show');
+        $('#error-notifications h5').html('Upload Fail');
+      })
+    })
+  
+</script>
+```
+### Laravel Controller Code
+```bash
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\GalleryModel;
+
+class Gallery extends Controller
+{
+    function galleryIndex(){
+        return view('Gallery');
+    }
+    function uploadImage(Request $request){
+       $imagePath = $request->file('image')->store('public');
+       $imageName = (explode('/', $imagePath))[1];
+       $host = $_SERVER['HTTP_HOST'];
+       $imageUrl = $host. "/storage/". $imageName;
+       $result = GalleryModel::insert(['image_path'=>$imageUrl]);
+       return $result;
+    }
+}
+
 ```
 # Laravel Function
  ## 1. {{asset()}}
@@ -481,5 +703,19 @@ class HomeController extends Controller
         ]);
    }
    
+}
+```
+# 20. explode()
+with explode() function you can divide a string
+### Code Example
+```bash
+ function uploadImage(Request $request){
+       $imagePath = $request->file('image')->store('public');
+       $imageName = (explode('/', $imagePath))[1];
+       $host = $_SERVER['HTTP_HOST'];
+       $imageUrl = $host. "/storage/". $imageName;
+       GalleryModel::insert(['image_path'=>$imageUrl]);
+       return $imageName;
+    }
 }
 ```

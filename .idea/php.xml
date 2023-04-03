@@ -109,6 +109,7 @@
       <path value="$PROJECT_DIR$/blog/vendor/psr/http-client" />
       <path value="$PROJECT_DIR$/blog/vendor/psr/http-factory" />
       <path value="$PROJECT_DIR$/blog/vendor/composer" />
+      <path value="$PROJECT_DIR$/blog/vendor/artesaos/seotools" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.3">
