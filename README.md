@@ -57,6 +57,24 @@ class VisitorTable extends Migration
 }
 
 ```
+# Laravel Migration by Controller
+When you want to create and migration by controller you should follow this command
+
+To create migration file include this code on your migration controller
+``` bash
+Artisan::call('make:migration your_table_name');
+```
+To run the migrate file include this code on you migration controller
+``` bash
+Artisan::call('migrate');
+```
+To clear cache add this code to your controller
+``` bash
+Artisan::call('cache:clear');
+Artisan::call('route:clear');
+Artisan::call('config:clear');
+Artisan::call('view:clear');
+```
 # Create Laravel Model
 ### Command
 ```bash
@@ -178,6 +196,138 @@ class LoginController extends Controller
 }
 
 ```
+# App Cache Clear
+Some cache clear command in mentioned bellow
+``` bash 
+php artisan cache:clear
+php artisan route:clear
+php artisan config:clear
+php artisan view:clear
+```
+# .env File modification
+.env file path function
+```bash
+app()->environmentFilePath();
+```
+get .env file as string function
+```bash
+file_get_contents();
+```
+To add a new line at last of the .env string apply this
+```bash 
+$envString = file_get_contents($envPathLocation);
+$envString.="\n";
+```
+Get the string position function
+```bash
+strpos(string,find,start)
+```
+string(required) specifies the string to search.<br> find(required) Specifies the string to find and <br>start(optional) parameter Specifies where to begin the search. If start is a negative number, it counts from the end of the string.
+
+Cut a string. The substr() function returns a part of a string.
+```bash
+substr(string,start,length)
+```
+string(required) Specifies the string to return a part of. start(required) Specifies where to start in the string. length(optional) Specifies the length of the returned string. Default is to the end of the string.
+
+String replace function str_replace();
+```bash 
+str_replace(find,replace,string,count);
+```
+find(Required) Specific value to find<br>
+replace(Required) Specifies the value to replace the value in find<br>
+string(Required). Specifies the string to be searched<br>
+count(optional). A variable that counts the number of replacements
+
+file_put_contents(); function to write the string
+```bash 
+file_put_contents(filename, data, mode, context)
+```
+filename(Required) Specifies the path to the file to write to. If the file does not exist, this function will create one<br>
+
+data (Required) The data to write to the file. Can be a string, array, or a data stream<br>
+
+mode (Optional) Specifies how to open/write to the file. Possible values:<br>
+- FILE_USE_INCLUDE_PATH - search for filename in the include directory
+- FILE_APPEND - if file already exists, append the data to it instead of overwriting it
+- LOCK_EX - Put an exclusive lock on the file while writing to it
+
+context (Optional) Specifies the context of the file handle. Context is a set of options that can modify the behavior of a stream.
+## Global function to modify .env file example
+```bash
+function SetEnvVal($envKey, $envValue){
+       $envFilePath = app()->environmentFilePath();
+       $envByString = file_get_contents($envFilePath);
+        // Create a new line at last of the .env string
+        $envByString.="\n";
+        // Get String Position
+        $keyStartPos = strpos($envByString, "{$envKey}=");
+        $keyEndingPos = strpos($envByString, "\n", $keyStartPos);
+        $oldValue = substr($envByString, $keyStartPos, $keyEndingPos-$keyStartPos);
+
+        if(!$keyStartPos || !$keyEndingPos || !$oldValue){
+            $envByString.="{$envKey}={$envValue}\n";
+        } else {
+            $envByString = str_replace($oldValue, "{$envKey}={$envValue}", $envByString);
+        }
+        $envByString = substr($envByString, 0, -1);
+        $changingResult = file_put_contents($envFilePath, $envByString);
+        if(!$changingResult){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    function EnvConfig(){
+        $this->SetEnvVal('DB_DATABASE', 'my_database');
+        $this->SetEnvVal('DB_USERNAME', 'my_user');
+        $this->SetEnvVal('DB_PASSWORD', '28428927');
+
+        $this->SetEnvVal('ON_SIGNAL_API_KEY', '2424354654754736');
+        $this->SetEnvVal('SMS_API_KEY', '457346347537355673');
+        $this->SetEnvVal('SMS_API_USER', '35634563453');
+        $this->SetEnvVal('SMS_API_PASS', '563634645645');
+    }
+```
+## PHP Configuration Check function
+```bash
+ function serverConfigCheck(){
+        $phpVersion = phpversion();
+        $bcmath = extension_loaded('bcmath');
+        $ctype = extension_loaded('ctype');
+        $fileInfo = extension_loaded('fileinfo');
+        $json = extension_loaded('json');
+        $mbString = extension_loaded('mbstring');
+        $openSSL = extension_loaded('openssl');
+        $tokenizer = extension_loaded('tokenizer');
+        $xml = extension_loaded('xml');
+        $pdo = defined('PDO::ATTR_DRIVER_NAME');
+        if($phpVersion >= 7.2 && $bcmath == true && $ctype == true && $fileInfo == true && $json == true && $mbString == true && $openSSL == true && $tokenizer == true && $xml == true && $pdo == true){
+            return "Laravel 7x Supported";
+        } else {
+            return  "Laravel 7x ont Supported";
+        }
+    }
+```
+phpversion() function is for to check the current php version.<br>
+extension_loaded(extension) function is for find out whether an extension is loaded.<br>
+extension(required) The extension name. This parameter is case-insensitive.
+
+You can see the names of various extensions by using phpinfo() or if you're using the CGI or CLI version of PHP you can use the -m switch to list all available extensions:<br>
+$ php -m<br>
+[PHP Modules]<br>
+xml<br>
+tokenizer<br>
+standard<br>
+sockets<br>
+session<br>
+posix<br>
+pcre<br>
+overload<br>
+mysql<br>
+mbstring<br>
+ctype
 # Routing System on Laravel 8
 There some changes on Routing System in Laravel 8
 ```bash
